@@ -1,34 +1,33 @@
-# Android-TiffBitmapFactory
-TiffBitmapFactory is an Android library that allows opening and saving images in *.tif format (See [Wikipedia](https://en.wikipedia.org/wiki/Tagged_Image_File_Format)) on Android devices.
+# TiffAndroid
+This repo is the fork of [Android-TiffBitmapFactory](https://github.com/Beyka/Android-TiffBitmapFactory) repo
+with updated project structure and build configuration (16KB pages supported).
 
-For decoding and encoding *.tif files it uses the native library [libtiff](https://github.com/dumganhar/libtiff). Also for images that compressed with jpeg compression scheme used [libjpeg9 for android](https://github.com/Suvitruf/libjpeg-version-9-android) (the IJG code). For converting from PNG to TIFF and from TIFF to PNG used library [libpng-android](https://github.com/julienr/libpng-android).
+TiffAndroid is an Android library that allows to work with images in tiff format (See [Wikipedia](https://en.wikipedia.org/wiki/Tagged_Image_File_Format)) on Android devices. They have *.tiff or *.tif extension usually.
 
-Just now it has possibility to open tif image as mutable bitmap, read count of directory in file, apply sample rate for bitmap decoding and choose directory to decode.
-While saving there is available few(most popular) compression mods and some additiona fields that can be writen to file, like author or copyright.
+For decoding and encoding tiff files it uses the native library [libtiff](https://github.com/dumganhar/libtiff). Also for images that compressed with jpeg compression scheme used [libjpeg9 for android](https://github.com/Suvitruf/libjpeg-version-9-android) (the IJG code). For converting from PNG to TIFF and from TIFF to PNG used library [libpng-android](https://github.com/julienr/libpng-android).
 
-Minimum Android API level 16
+Just now it has possibility to open tiff image as mutable bitmap, read count of directory in file, apply sample rate for bitmap decoding and choose directory to decode.
+While saving there is available few(most popular) compression mods and some additional fields that can be written to file, like author or copyright.
 
-Supported architectures: all
+Minimum Android API level 26
+
+Supported architectures: arm64-v8a, armeabi-v7a, x86_64
 
 ### Installation
-Just add to your gradle dependencies :
+Add repo:
 ```
-implementation 'io.github.beyka:Android-TiffBitmapFactory:0.9.9.1'
+mavenCentral()
+```
+Add dependency:
+```
+implementation('io.github.alexandermatveychuk:tiffandroid:0.10.0'
 ```
 And do not forget to add WRITE_EXTERNAL_STORAGE permission to main project manifest
 
-### Build from sources
-To build native part of library use [Android-NDK-bundle](https://developer.android.com/tools/sdk/ndk/index.html).
-<p>To start build go to tiffbitmapfactory folder and run</p>
-
-``` Gradle
-ndk-build NDK_PROJECT_PATH=src/main
-```
-
 ### Usage
 #### Opening tiff file
-Starting Android-Q we can't open any file from sdcar, just files from scoped storage of application
-If you need open file somewhere in sdcardm you should use [Storage Access Framework](https://android-doc.github.io/guide/topics/providers/document-provider.html)
+Starting Android-Q we can't open any file from sdcard, just files from scoped storage of application
+If you need open file somewhere in sdcard you should use [Storage Access Framework](https://android-doc.github.io/guide/topics/providers/document-provider.html)
 
 Request document chooser(Android system don't know image/tiff type so using */*):
 ```Java
@@ -131,7 +130,7 @@ options.orientation = Orientation.ORIENTATION_LEFTTOP;
 options.author = "beyka";
 //Add copyright tag to output file
 options.copyright = "Some copyright";
-//Save image as tif. If image saved succesfull true will be returned
+//Save image as tif. If image saved successful true will be returned
 boolean saved = TiffSaver.saveBitmap("/sdcard/out.tif", bitmap, options);
 ```
 
@@ -149,14 +148,14 @@ options.orientation = Orientation.ORIENTATION_LEFTTOP;
 options.author = "beyka";
 //Add copyright tag to output file
 options.copyright = "Some copyright";
-//Add new directory to existing file or create new file. If image saved succesfull true will be returned
+//Add new directory to existing file or create new file. If image saved successful true will be returned
 boolean saved = TiffSaver.appendBitmap("/sdcard/out.tif", bitmap, options);
 ```
-Every new page will be added as new directory to the end of file. If you trying to append directory to non-exisiting file - new file will be created
+Every new page will be added as new directory to the end of file. If you trying to append directory to non-existing file - new file will be created
 
 
 #### Converting to tiff
-There is possibility for dirrect convert from some formats to TIFF. This method uses as less memory as possible. Use this method if you want create TIFF form realy big image file.
+There is possibility for direct convert from some formats to TIFF. This method uses as less memory as possible. Use this method if you want create TIFF form really big image file.
 ```Java
 TiffConverter.ConverterOptions options = new TiffConverter.ConverterOptions();
 options.throwExceptions = false; //Set to true if you want use java exception mechanism;
@@ -194,20 +193,14 @@ IProgressListener progressListener = new IProgressListener() {
 };
 ```
 
-### Proguard
-If you use proguard add this to you config file:
-```Gradle
--keep class org.beyka.tiffbitmapfactory.**{ *; }
-```
-
-### 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Special thanks to [dennis508](https://github.com/dennis508)    for providing of incremental reading of TIFF file
-
-
-### Applications that uses library:
-[B Tiff Viewer](https://play.google.com/store/apps/details?id=com.beyka.btiffviewer)
-
+### License
+    The MIT License (MIT)
+    
+    Original code copyright © 2018 Oleksii Bei aka Beyka
+    Modifications copyright © 2025 Alexander Matveychuk
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

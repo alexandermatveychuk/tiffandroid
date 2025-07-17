@@ -1,0 +1,8 @@
+[versions]
+gradleBuildTools = "8.11.1"
+
+[plugins]
+android-library = { id = "com.android.library" }
+
+[libraries]
+android-tools-build = { module = "com.android.tools.build:gradle", version.ref = "gradleBuildTools" }
