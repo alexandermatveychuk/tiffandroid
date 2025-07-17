@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
-    id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 val libVersion = "0.10.0"
@@ -42,35 +42,40 @@ android {
             isUniversalApk = false
         }
     }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
 }
 
 afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
-                groupId = "io.github.alexandermatveychuk"
-                artifactId = "tiffandroid"
-                version = libVersion
+    mavenPublishing {
+        coordinates("io.github.alexandermatveychuk", "tiffandroid", libVersion)
 
-                from(components["release"])
-            }
-        }
-
-        repositories {
-            maven {
-                name = "MavenCentral"
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = System.getenv("MVNCENTRAL_USERNAME")
-                    password = System.getenv("MVNCENTRAL_PASSWORD")
+        pom {
+            name.set("TiffAndroid")
+            description.set("Android wrapper for libtiff. Renders tiff to android Bitmap, converts to other image formats, can encode tiff image.")
+            inceptionYear.set("2025")
+            url.set("https://github.com/alexandermatveychuk/tiffandroid")
+            licenses {
+                license {
+                    name.set("The MIT License (MIT)")
+                    url.set("https://mit-license.org/")
+                    distribution.set("repo")
                 }
             }
+            developers {
+                developer {
+                    id.set("alexandermatveychuk")
+                    name.set("Alexander Matveychuk")
+                    url.set("https://github.com/alexandermatveychuk")
+                }
+            }
+            scm {
+                url.set("https://github.com/alexandermatveychuk/tiffandroid")
+                connection.set("scm:git:git://github.com/alexandermatveychuk/tiffandroid.git")
+                developerConnection.set("scm:git:ssh://git@github.com/alexandermatveychuk/tiffandroid.git")
+            }
         }
+
+        publishToMavenCentral()
+
+        signAllPublications()
     }
 }
